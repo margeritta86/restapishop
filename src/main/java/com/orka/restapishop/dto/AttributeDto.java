@@ -1,0 +1,15 @@
+package com.orka.restapishop.dto;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
+public class AttributeDto {
+
+
+    private String id;
+    private String name;
+    private String value;
+
+}
