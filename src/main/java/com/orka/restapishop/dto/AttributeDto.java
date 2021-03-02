@@ -1,5 +1,6 @@
 package com.orka.restapishop.dto;
 
+import com.orka.restapishop.model.Product;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,8 +9,9 @@ import lombok.Data;
 public class AttributeDto {
 
 
-    private String id;
+    private Long id;
     private String name;
     private String value;
+
 
 }

@@ -1,8 +1,12 @@
 package com.orka.restapishop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.orka.restapishop.dto.ProductDto;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -10,18 +14,18 @@ import java.util.List;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(scale = 2)
     private BigDecimal price;
     private String imageUrl;
     private String details;
     private Rate rate;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "product_id" )
     private List<Attribute> attributes;
-    @ManyToOne
-    @JoinColumn(name="basket_id")
-    private Basket basket;
+
 
 
     public Product() {
@@ -31,6 +35,18 @@ public class Product {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public ProductDto mapToDto(){
+        return  ProductDto.builder()
+                        .id(id)
+                        .attributes(attributes)
+                        .price(price)
+                        .details(details)
+                        .name(name)
+                        .imageUrl(imageUrl)
+                        .rate(rate)
+                        .build();
     }
 
     public Long getId() {
@@ -89,11 +105,30 @@ public class Product {
         this.attributes = attributes;
     }
 
-    public Basket getBasket() {
-        return basket;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
     }
 
-    public void setBasket(Basket basket) {
-        this.basket = basket;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", details='" + details + '\'' +
+                ", rate=" + rate +
+                ", attributes=" + attributes +
+                '}';
     }
 }

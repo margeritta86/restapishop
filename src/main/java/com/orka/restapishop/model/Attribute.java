@@ -2,6 +2,7 @@ package com.orka.restapishop.model;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -13,13 +14,16 @@ public class Attribute {
     private Long id;
     private String name;
     private String value;
-    @ManyToOne
-    @JoinColumn(name="product_id")
-    private Product product;
+
 
     public Attribute() {
     }
 
+    public Attribute(String name, String value) {
+        this.name = name;
+        this.value = value;
+
+    }
 
     public Long getId() {
         return id;
@@ -45,11 +49,25 @@ public class Attribute {
         this.value = value;
     }
 
-    public Product getProduct() {
-        return product;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Attribute attribute = (Attribute) o;
+        return Objects.equals(id, attribute.id);
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Attribute{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
 }

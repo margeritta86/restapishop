@@ -1,12 +1,11 @@
 package com.orka.restapishop.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.orka.restapishop.dto.ProductDto;
-import com.orka.restapishop.model.Product;
 import com.orka.restapishop.service.ProductService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.orka.restapishop.view.View;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,8 +19,19 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @JsonView({View.MinimalDetails.class})
     @GetMapping("/products")
-    public List<ProductDto> getAll(){
-        return  productService.getAllProducts();
+    public List<ProductDto> getAll() {
+        return productService.getAllProducts();
     }
+
+    @JsonView({View.Details.class})
+    @GetMapping("/products/{id}")
+    public ProductDto getDetailsOfProduct(@PathVariable Long id) {
+        return productService.getProductById(id);
+    }
+
+
+
+
 }
