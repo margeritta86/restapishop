@@ -1,11 +1,10 @@
 package com.orka.restapishop.model;
 
 import com.orka.restapishop.dto.BasketDto;
+import com.orka.restapishop.excepiton.ProductNotFoundException;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -15,39 +14,39 @@ public class Basket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @OneToOne(mappedBy = "basket")
     private Customer customer;
-    @ManyToMany
-    private List<Product> products;
-    private int discount;
+    @ElementCollection
+    private Map<Product, Integer> products;
+    private String discountCode;
 
 
     public Basket() {
-        products = new ArrayList<>();
+        products = new HashMap<>();
     }
 
     public Basket(Customer customer) {
         this.customer = customer;
-        products = new ArrayList<>();
+        products = new HashMap<>();
     }
 
     public BasketDto mapToDto() {
+
         return BasketDto.builder()
                 .id(id)
                 .customerId(customer.getId())
-                .products(products.stream()
-                        .map(Product::mapToDto)
-                        .collect(Collectors.toList()))
-                .discount(discount)
+                .products(products.entrySet().stream()
+                        .collect(Collectors.toMap(e -> e.getKey().getId(), Map.Entry::getValue)))
+                .discountCode(discountCode)
                 .build();
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -59,24 +58,36 @@ public class Basket {
         this.customer = customer;
     }
 
-    public List<Product> getProducts() {
+    public Map<Product, Integer> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(Map<Product, Integer> products) {
         this.products = products;
     }
 
-    public Integer getDiscount() {
-        return discount;
+    public String getDiscountCode() {
+        return discountCode;
     }
 
-    public void setDiscount(Integer discount) {
-        this.discount = discount;
+    public void setDiscountCode(String discountCode) {
+        this.discountCode = discountCode;
     }
 
-    public void addProduct(Product product) {
-        products.add(product);
+    public void addProduct(Product product, Integer amount) {
+        if (products.containsKey(product)) {
+
+            products.put(product, products.get(product) + amount);
+        } else {
+            products.put(product, amount);
+        }
+    }
+
+    public void updateProduct(Product product, Integer amount) {
+        if (!products.containsKey(product)) {
+            throw new ProductNotFoundException(product.getId());
+        }
+        products.put(product, amount);
     }
 
     @Override
@@ -98,7 +109,7 @@ public class Basket {
                 "id=" + id +
                 ", customer=" + customer.getId() +
                 ", products=" + products +
-                ", discount=" + discount +
+                ", discount=" + discountCode +
                 '}';
     }
 }

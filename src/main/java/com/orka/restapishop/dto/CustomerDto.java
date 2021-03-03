@@ -5,6 +5,8 @@ import com.orka.restapishop.model.Basket;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Builder
 @Data
 public class CustomerDto {
@@ -14,6 +16,7 @@ public class CustomerDto {
     private String lastName;
     private String address;
     private BasketDto basket;
+    private List<OrderDto> orders;
 
 
 }

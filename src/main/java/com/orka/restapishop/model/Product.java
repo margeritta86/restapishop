@@ -15,7 +15,8 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
+    private long amount;
     private String name;
     @Column(scale = 2)
     private BigDecimal price;
@@ -40,6 +41,7 @@ public class Product {
     public ProductDto mapToDto(){
         return  ProductDto.builder()
                         .id(id)
+
                         .attributes(attributes)
                         .price(price)
                         .details(details)
@@ -53,8 +55,16 @@ public class Product {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(long amount) {
+        this.amount = amount;
     }
 
     public String getName() {
@@ -104,6 +114,7 @@ public class Product {
     public void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
     }
+
 
 
     @Override

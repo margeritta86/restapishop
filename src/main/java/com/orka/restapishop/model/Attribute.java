@@ -11,7 +11,7 @@ public class Attribute {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
     private String name;
     private String value;
 

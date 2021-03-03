@@ -1,10 +1,8 @@
 package com.orka.restapishop.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
+
 import com.orka.restapishop.dto.BasketDto;
 import com.orka.restapishop.service.BasketService;
-import com.orka.restapishop.service.ProductService;
-import com.orka.restapishop.view.View;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,25 +10,39 @@ import org.springframework.web.bind.annotation.*;
 public class BasketController {
 
     private BasketService basketService;
-    private ProductService productService;
 
-    public BasketController(BasketService basketService, ProductService productService) {
+    public BasketController(BasketService basketService) {
         this.basketService = basketService;
-        this.productService = productService;
     }
 
     @PostMapping("/{basketId}/products/{productId}")
-    public void addProductToBasket(@PathVariable Long basketId, @PathVariable Long productId){
-        basketService.saveProductToBasket(basketId,productId); // todo
+    public void addProductToBasket(@PathVariable Long basketId, @PathVariable Long productId, Integer count) {
+        int actualCount = count == null ? 1 : count;
+        basketService.saveProductToBasket(basketId, productId, actualCount);
 
     }
 
-    //@JsonView({View.Details.class})
     @GetMapping("/{basketId}")
-    public BasketDto getBasket(@PathVariable Long basketId){
-        BasketDto basketDtoById = basketService.getBasketDtoById(basketId);
-        System.err.println(basketDtoById);
-        return basketDtoById;
+    public BasketDto getBasket(@PathVariable Long basketId) {
+        return basketService.getBasketDtoById(basketId);
 
     }
+
+    @PatchMapping()
+    public void updateBasket(BasketDto basket) {//todo
+        basketService.updateBasket(basket);
+    }
+
+
+    /*@PostMapping()
+    public void setCustomerData(){
+
+    }
+
+    @PostMapping
+    public void confirmOrder(){
+
+    }*/
+
+
 }

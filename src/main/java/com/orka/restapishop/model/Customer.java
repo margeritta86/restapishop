@@ -1,40 +1,59 @@
 package com.orka.restapishop.model;
 
 import com.orka.restapishop.dto.CustomerDto;
+import com.orka.restapishop.dto.OrderDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
-@Table(name="customers")
+@Table(name = "customers")
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
     private String firstName;
     private String lastName;
     private String address;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Basket basket;
+    @OneToMany
+    private List<Order> orders;
 
 
     public Customer() {
+        orders = new ArrayList<>();
     }
 
     public Customer(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        orders = new ArrayList<>();
     }
 
-    public CustomerDto mapToDto(){
-        return  CustomerDto.builder()
+    public CustomerDto mapToDto() {
+        return CustomerDto.builder()
                 .id(id)
                 .firstName(firstName)
                 .lastName(lastName)
                 .address(address)
                 .basket(basket.mapToDto())
+                .orders(orders.stream()
+                        .map(Order::mapToDto)
+                        .collect(Collectors.toList()))
                 .build();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getFirstName() {
@@ -69,14 +88,17 @@ public class Customer {
         this.basket = basket;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    public Long getId() {
-        return id;
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
+    public void addOrderToList(Order order){
+        orders.add(order);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -98,7 +120,8 @@ public class Customer {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +
-                ", basket=" + basket.getId() +
+                ", basket=" + basket +
+                ", orders" + orders +
                 '}';
     }
 }

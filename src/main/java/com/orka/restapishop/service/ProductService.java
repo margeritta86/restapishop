@@ -2,6 +2,7 @@ package com.orka.restapishop.service;
 
 import com.orka.restapishop.dto.AttributeDto;
 import com.orka.restapishop.dto.ProductDto;
+import com.orka.restapishop.excepiton.ProductNotFoundException;
 import com.orka.restapishop.model.Product;
 import com.orka.restapishop.repository.AttributeRepository;
 import com.orka.restapishop.repository.ProductRepository;
@@ -47,8 +48,7 @@ public class ProductService {
     }
 
     public ProductDto getProductById(Long id){
-        return productRepository.findById(id).stream()
-                .map(Product::mapToDto).findFirst().get();//todo get
+        return productRepository.findById(id).orElseThrow(()->new ProductNotFoundException(id)).mapToDto();
 
     }
 
