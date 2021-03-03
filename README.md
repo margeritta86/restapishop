@@ -27,8 +27,8 @@
 * `GET http://localhost:8080/api/products/{id}` - get details, list of attributes, rate of the product by id
 * `POST http://localhost:8080/api/baskets//{basketId}/products/{id}`- add product to basket (identified basket's id and product's id)
 * `GET http://localhost:8080/api/baskets/{id}` - get basket data (identified by basket's id) 
-* `PATCH http://localhost:8080/baskets/{id}/products/{id}` - update product amount (identified basket's id and product's id)
-* `DELETE http://localhost:8080/baskets/{id}/products/{id}` - delete product from basket (identified basket's id and product's id)
+* `PATCH http://localhost:8080/api/baskets/{id}/products/{id}` - update product amount (identified basket's id and product's id)
+* `DELETE http://localhost:8080/api/baskets/{id}/products/{id}` - delete product from basket (identified basket's id and product's id)
 * `PATCH http://localhost:8080/api/baskets/{id}` - set a discount code to basket (identyfied by basket's id)
 * `POST http://localhost:8080/api/baskets/{id}/users` - set basic customer's data in the basket (identyfied by basket's id)
 * `POST http://localhost:8080/api/baskets/{id}/orders` - place order for the basket (identyfied by basket's id)
