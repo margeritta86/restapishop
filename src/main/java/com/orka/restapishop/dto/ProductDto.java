@@ -11,6 +11,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 
 @Builder
 @Data
@@ -32,6 +33,9 @@ public class ProductDto {
     private List<Attribute> attributes;//todo Attribute Dto
     @JsonView({View.Details.class})
     private long amount;
+    @JsonView({View.Details.class})
+    private boolean available;
+
 
 
 }

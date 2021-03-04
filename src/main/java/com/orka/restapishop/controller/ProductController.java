@@ -32,9 +32,15 @@ public class ProductController {
     }
 
     @JsonView({View.MinimalDetails.class})
-    @GetMapping("/products/")
+    @GetMapping("/products/byPrice")
     public List<ProductDto> getProductsByMinPrice(@RequestParam Long price, @RequestParam String minOrMax){//todo nie jest precyzyjne jeśli chodzi o zakres ceny
        return productService.getProductsByMinPrice(price,minOrMax);
+    }
+
+    @JsonView({View.MinimalDetails.class})
+    @GetMapping("/products/byKeyword")
+    public List<ProductDto> getProductsByKeyword(@RequestParam String keyword){
+        return productService.getProductsByKeyword(keyword);
     }
 
 }

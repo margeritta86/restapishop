@@ -1,6 +1,5 @@
 package com.orka.restapishop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.orka.restapishop.dto.ProductDto;
 
 import javax.persistence.*;
@@ -24,9 +23,9 @@ public class Product {
     private String details;
     private Rate rate;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "product_id" )
+    @JoinColumn(name = "product_id")
     private List<Attribute> attributes;
-
+    private boolean available;
 
 
     public Product() {
@@ -38,17 +37,18 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public ProductDto mapToDto(){
-        return  ProductDto.builder()
-                        .id(id)
-                        .amount(amount)
-                        .attributes(attributes)
-                        .price(price)
-                        .details(details)
-                        .name(name)
-                        .imageUrl(imageUrl)
-                        .rate(rate)
-                        .build();
+    public ProductDto mapToDto() {
+        return ProductDto.builder()
+                .id(id)
+                .amount(amount)
+                .attributes(attributes)
+                .price(price)
+                .details(details)
+                .name(name)
+                .imageUrl(imageUrl)
+                .rate(rate)
+                .available(available)
+                .build();
     }
 
     public Long getId() {
@@ -115,7 +115,18 @@ public class Product {
         this.attributes = attributes;
     }
 
+    public boolean isAvailable() {
+        if (amount > 0) {
+            available = true;
+        } else {
+            available = false;
+        }
+        return available;
+    }
 
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -139,6 +150,7 @@ public class Product {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", details='" + details + '\'' +
                 ", rate=" + rate +
+                ", isAvailable=" + available +
                 ", attributes=" + attributes +
                 '}';
     }

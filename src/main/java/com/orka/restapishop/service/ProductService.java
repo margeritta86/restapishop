@@ -65,19 +65,25 @@ public class ProductService {
 
 
     public List<ProductDto> getProductsByMinPrice(Long price, String minOrmax) {
-        if(minOrmax.equals("min")){
+        if (minOrmax.equals("min")) {
             return getAllProducts().stream()
                     .filter(productDto -> productDto.getPrice().longValue() >= price)
                     .collect(Collectors.toList());
-        }else if(minOrmax.equals("max")){
+        } else if (minOrmax.equals("max")) {
             return getAllProducts().stream()
-                    .filter(productDto -> productDto.getPrice().longValue()<=price)
+                    .filter(productDto -> productDto.getPrice().longValue() <= price)
                     .collect(Collectors.toList());
         }
         throw new RequestedValueException(minOrmax);
 
 
-
     }
 
+    public List<ProductDto> getProductsByKeyword(String keyword) {
+        String keywordLower = keyword.toLowerCase();
+        return getAllProducts().stream()
+                .filter(productDto -> productDto.getName().toLowerCase().contains(keywordLower))
+                .collect(Collectors.toList());
+
+    }
 }
