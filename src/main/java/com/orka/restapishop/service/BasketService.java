@@ -2,10 +2,7 @@ package com.orka.restapishop.service;
 
 
 import com.orka.restapishop.dto.BasketDto;
-import com.orka.restapishop.excepiton.BasketNotFoundException;
-import com.orka.restapishop.excepiton.CustomerNotFoundException;
-import com.orka.restapishop.excepiton.ProductNotFoundException;
-import com.orka.restapishop.excepiton.RequestedAmountException;
+import com.orka.restapishop.excepiton.*;
 import com.orka.restapishop.model.Basket;
 import com.orka.restapishop.model.Customer;
 import com.orka.restapishop.model.Order;
@@ -59,9 +56,13 @@ public class BasketService {
         Basket basket2 = new Basket();
         Basket basket3 = new Basket();
 
+        Basket basket4 = new Basket();
+
         basketRepository.save(basket1);
         basketRepository.save(basket2);
         basketRepository.save(basket3);
+
+        basketRepository.save(basket4);
 
         customerRepository.save(customer1);
         customerRepository.save(customer2);
@@ -154,5 +155,34 @@ public class BasketService {
         message += " for product id" + idProduct;
 
         return message;
+    }
+
+    public void deleteProductFromBasket(Long basketId, Long productId) {
+        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
+        basket.deleteProduct(productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId)));
+        basketRepository.save(basket);
+    }
+
+    public void setCustomerData(Long basketId, String firstName,String lastName, String address) {
+        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
+        Customer customer  = new Customer(firstName,lastName,address);
+        basket.setCustomer(customer);
+        customer.setBasket(basket);
+        customerRepository.save(customer);
+        basketRepository.save(basket);
+
+    }
+
+    public void placeOrder(Long basketId) {
+        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
+        Order order = new Order(basket);
+        Customer customer = basket.getCustomer();
+        if(basket.getCustomer()==null){
+            throw new CustomerRequiredException();
+        }
+        order.setPlacedOrder(true);
+        orderRepository.save(order);
+        customer.addOrderToList(order);
+        customerRepository.save(customer);
     }
 }

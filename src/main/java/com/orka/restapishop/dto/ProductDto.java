@@ -30,7 +30,8 @@ public class ProductDto {
     private Rate rate;
     @JsonView({View.Details.class})
     private List<Attribute> attributes;//todo Attribute Dto
+    @JsonView({View.Details.class})
+    private long amount;
 
-    //todo dodać stan magazynowy (amount z klasy Product)
 
 }

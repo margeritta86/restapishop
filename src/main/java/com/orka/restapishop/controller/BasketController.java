@@ -34,15 +34,22 @@ public class BasketController {
     }
 
 
-    /*@PostMapping()
-    public void setCustomerData(){
+
+    @DeleteMapping("{basketId}/products/{productId}")
+    public void deleteProductFromBasket(@PathVariable Long basketId, @PathVariable Long productId){
+        basketService.deleteProductFromBasket(basketId,productId);
 
     }
+    @PostMapping("{basketId}/users/")
+    public void setCustomerData(@PathVariable Long basketId, String firstName,String lastName, String address){
+        basketService.setCustomerData(basketId,firstName,lastName,address);
+    }
 
-    @PostMapping
-    public void confirmOrder(){
+    @PostMapping("{basketId}/orders")
+    public void placeOrder(@PathVariable Long basketId){
+        basketService.placeOrder(basketId);
 
-    }*/
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.orka.restapishop.service;
 import com.orka.restapishop.dto.AttributeDto;
 import com.orka.restapishop.dto.ProductDto;
 import com.orka.restapishop.excepiton.ProductNotFoundException;
+import com.orka.restapishop.excepiton.RequestedValueException;
 import com.orka.restapishop.model.Product;
 import com.orka.restapishop.repository.AttributeRepository;
 import com.orka.restapishop.repository.ProductRepository;
@@ -47,8 +48,8 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public ProductDto getProductById(Long id){
-        return productRepository.findById(id).orElseThrow(()->new ProductNotFoundException(id)).mapToDto();
+    public ProductDto getProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id)).mapToDto();
 
     }
 
@@ -62,18 +63,21 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public Product productDtoToEntity(ProductDto productDto){
-        Product product = new Product();
-        product.setId(productDto.getId());
-        product.setName(productDto.getName());
-        product.setAttributes(productDto.getAttributes());
-        product.setDetails(productDto.getDetails());
-        product.setPrice(productDto.getPrice());
-        product.setImageUrl(productDto.getImageUrl());
-        product.setRate(productDto.getRate());
 
-        return product;
+    public List<ProductDto> getProductsByMinPrice(Long price, String minOrmax) {
+        if(minOrmax.equals("min")){
+            return getAllProducts().stream()
+                    .filter(productDto -> productDto.getPrice().longValue() >= price)
+                    .collect(Collectors.toList());
+        }else if(minOrmax.equals("max")){
+            return getAllProducts().stream()
+                    .filter(productDto -> productDto.getPrice().longValue()<=price)
+                    .collect(Collectors.toList());
+        }
+        throw new RequestedValueException(minOrmax);
+
+
+
     }
-
 
 }

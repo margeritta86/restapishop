@@ -35,6 +35,13 @@ public class Customer {
         orders = new ArrayList<>();
     }
 
+    public Customer(String firstName, String lastName, String address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        orders = new ArrayList<>();
+    }
+
     public CustomerDto mapToDto() {
         return CustomerDto.builder()
                 .id(id)
@@ -48,11 +55,11 @@ public class Customer {
                 .build();
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -120,7 +127,7 @@ public class Customer {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +
-                ", basket=" + basket +
+                ", basket=" + basket.getId() +
                 ", orders" + orders +
                 '}';
     }

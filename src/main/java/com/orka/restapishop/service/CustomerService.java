@@ -25,7 +25,6 @@ public class CustomerService {
 
     public List<OrderDto> getListOfOrders(long id) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
-        System.err.println(customer);
         return customer.mapToDto().getOrders();
     }
 

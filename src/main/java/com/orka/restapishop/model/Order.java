@@ -1,12 +1,13 @@
 package com.orka.restapishop.model;
 
 import com.orka.restapishop.dto.OrderDto;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Table(name="orders")
+@Table(name = "orders")
 public class Order {
 
 
@@ -16,15 +17,23 @@ public class Order {
     @OneToOne
     private Basket basket;
     private BigDecimal totalPrice;
+    private boolean placedOrder;
 
 
     public Order() {
+        placedOrder = false;
     }
 
-    public OrderDto mapToDto(){
-        return  OrderDto.builder()
+    public Order(Basket basket) {
+        this.basket = basket;
+        placedOrder = false;
+    }
+
+    public OrderDto mapToDto() {
+        return OrderDto.builder()
                 .id(id)
                 .basket(basket.mapToDto())
+                .placedOrder(placedOrder)
                 .build();
     }
 
@@ -50,6 +59,14 @@ public class Order {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public boolean isPlacedOrder() {
+        return placedOrder;
+    }
+
+    public void setPlacedOrder(boolean placedOrder) {
+        this.placedOrder = placedOrder;
     }
 
     @Override

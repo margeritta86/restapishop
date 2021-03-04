@@ -35,7 +35,7 @@ public class Basket {
 
         return BasketDto.builder()
                 .id(id)
-                .customerId(customer.getId())
+                .customerId(customer.getId())//todo przy pobieraniu danych o koszyku, który nie ma przypisanego customera wywala nullpointera
                 .products(products.entrySet().stream()
                         .collect(Collectors.toMap(e -> e.getKey().getId(), Map.Entry::getValue)))
                 .discountCode(discountCode)
@@ -53,6 +53,10 @@ public class Basket {
     public Customer getCustomer() {
         return customer;
     }
+
+    /*public Optional<Customer> getCustomer() {
+        return Optional.ofNullable(customer);
+    }*/
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
@@ -88,6 +92,14 @@ public class Basket {
             throw new ProductNotFoundException(product.getId());
         }
         products.put(product, amount);
+    }
+
+    public void deleteProduct(Product product){
+        if (!products.containsKey(product)) {
+            throw new ProductNotFoundException(product.getId());
+        }
+        products.remove(product);
+
     }
 
     @Override

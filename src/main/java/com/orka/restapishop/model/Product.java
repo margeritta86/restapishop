@@ -41,7 +41,7 @@ public class Product {
     public ProductDto mapToDto(){
         return  ProductDto.builder()
                         .id(id)
-
+                        .amount(amount)
                         .attributes(attributes)
                         .price(price)
                         .details(details)
