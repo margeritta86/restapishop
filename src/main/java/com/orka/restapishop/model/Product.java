@@ -1,7 +1,6 @@
 package com.orka.restapishop.model;
 
 import com.orka.restapishop.dto.ProductDto;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;

@@ -2,6 +2,7 @@ package com.orka.restapishop.controller;
 
 
 import com.orka.restapishop.dto.BasketDto;
+import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.service.BasketService;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +30,9 @@ public class BasketController {
     }
 
     @PatchMapping()
-    public void updateBasket(BasketDto basket) {//todo
+    public void updateBasket(@RequestBody BasketDto basket) {//todo
         basketService.updateBasket(basket);
     }
-
 
 
     @DeleteMapping("{basketId}/products/{productId}")
@@ -40,16 +40,16 @@ public class BasketController {
         basketService.deleteProductFromBasket(basketId,productId);
 
     }
-    @PostMapping("{basketId}/users/")
-    public void setCustomerData(@PathVariable Long basketId, String firstName,String lastName, String address){
-        basketService.setCustomerData(basketId,firstName,lastName,address);
+    @PostMapping("{basketId}/customers/")
+    public void setDeliveryData(@PathVariable Long basketId, @RequestBody DeliveryDataDto deliveryData){
+        basketService.setDeliveryData(basketId,deliveryData);
     }
 
-    @PostMapping("{basketId}/orders")
-    public void placeOrder(@PathVariable Long basketId){
-        basketService.placeOrder(basketId);
+   /* @GetMapping("/{basketId}")
+    public BasketDto recalculateBasketTotalPRice(@PathVariable Long basketId){
+        basketService.recalculateBasketTotalPRice(basketId);
+    }*/
 
-    }
 
 
 }

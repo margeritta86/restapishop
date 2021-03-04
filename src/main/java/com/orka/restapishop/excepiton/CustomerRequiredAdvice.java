@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class CustomerRequiredAdvice {
 
     @ResponseBody
-    @ExceptionHandler(CustomerRequiredException.class)
+    @ExceptionHandler(DeliveryDataRequiredException.class)
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    public String productNotFoundHandler(CustomerRequiredException ex){
+    public String productNotFoundHandler(DeliveryDataRequiredException ex){
         return ex.getMessage();
     }
 }

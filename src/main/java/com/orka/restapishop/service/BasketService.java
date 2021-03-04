@@ -2,11 +2,9 @@ package com.orka.restapishop.service;
 
 
 import com.orka.restapishop.dto.BasketDto;
+import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.excepiton.*;
-import com.orka.restapishop.model.Basket;
-import com.orka.restapishop.model.Customer;
-import com.orka.restapishop.model.Order;
-import com.orka.restapishop.model.Product;
+import com.orka.restapishop.model.*;
 import com.orka.restapishop.repository.BasketRepository;
 import com.orka.restapishop.repository.CustomerRepository;
 import com.orka.restapishop.repository.OrderRepository;
@@ -14,6 +12,7 @@ import com.orka.restapishop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 
 @Service
@@ -23,12 +22,15 @@ public class BasketService {
     private CustomerRepository customerRepository;
     private ProductRepository productRepository;
     private OrderRepository orderRepository;
+    private DeliveryDataService deliveryDataService;
 
-    public BasketService(BasketRepository basketRepository, CustomerRepository customerRepository, ProductRepository productRepository, OrderRepository orderRepository) {
+
+    public BasketService(BasketRepository basketRepository, CustomerRepository customerRepository, ProductRepository productRepository, OrderRepository orderRepository, DeliveryDataService deliveryDataService) {
         this.basketRepository = basketRepository;
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
+        this.deliveryDataService = deliveryDataService;
     }
 
 
@@ -48,9 +50,12 @@ public class BasketService {
         if (basketRepository.count() > 0 && customerRepository.count() > 0) {
             return;
         }
-        Customer customer1 = new Customer("Marina", "Kaczor");
-        Customer customer2 = new Customer("Masza", "Tau");
-        Customer customer3 = new Customer("Nikola", "Thomson");
+
+        //todo przygotowac razem z deliverydataa
+
+        Customer customer1 = new Customer();
+        Customer customer2 = new Customer();
+        Customer customer3 = new Customer();
 
         Basket basket1 = new Basket();
         Basket basket2 = new Basket();
@@ -71,10 +76,6 @@ public class BasketService {
         customer1.setBasket(basket1);
         customer2.setBasket(basket2);
         customer3.setBasket(basket3);
-
-        basket1.setCustomer(customer1);
-        basket2.setCustomer(customer2);
-        basket3.setCustomer(customer3);
 
         customerRepository.save(customer1);
         customerRepository.save(customer2);
@@ -163,26 +164,34 @@ public class BasketService {
         basketRepository.save(basket);
     }
 
-    public void setCustomerData(Long basketId, String firstName,String lastName, String address) {
+    public void setDeliveryData(Long basketId, DeliveryDataDto deliveryDataDto) {
         Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
-        Customer customer  = new Customer(firstName,lastName,address);
-        basket.setCustomer(customer);
-        customer.setBasket(basket);
-        customerRepository.save(customer);
+        DeliveryData deliveryData = deliveryDataService.createAndSaveDeliveryData(deliveryDataDto);
+        basket.setDeliveryData(deliveryData);
         basketRepository.save(basket);
+    }
+
+    public void placeOrder(Long basketId, Optional<Long> customerId) {
+        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
+        Order order = new Order(basket);
+        if (basket.getDeliveryData() == null) {
+            throw new DeliveryDataRequiredException();//todo zmiana w klasie wyjątku i w advice
+        }
+        customerId.ifPresent(id -> {
+            Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
+            Basket newEmptyBasket = new Basket();
+            basketRepository.save(newEmptyBasket);
+            customer.setBasket(newEmptyBasket);
+            customer.addOrderToList(order);
+            customerRepository.save(customer);
+        });
+
+        orderRepository.save(order);
 
     }
 
-    public void placeOrder(Long basketId) {
-        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
-        Order order = new Order(basket);
-        Customer customer = basket.getCustomer();
-        if(basket.getCustomer()==null){
-            throw new CustomerRequiredException();
-        }
-        order.setPlacedOrder(true);
-        orderRepository.save(order);
-        customer.addOrderToList(order);
-        customerRepository.save(customer);
+    public void recalculateBasketTotalPRice(Long basketId) {
+
+
     }
 }

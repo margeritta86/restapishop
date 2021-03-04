@@ -1,7 +1,7 @@
 package com.orka.restapishop.model;
 
 import com.orka.restapishop.dto.CustomerDto;
-import com.orka.restapishop.dto.OrderDto;
+import com.orka.restapishop.dto.DeliveryDataDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,9 +16,8 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String firstName;
-    private String lastName;
-    private String address;
+    @OneToOne
+    private DeliveryData deliveryData;
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Basket basket;
     @OneToMany
@@ -29,25 +28,16 @@ public class Customer {
         orders = new ArrayList<>();
     }
 
-    public Customer(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Customer(DeliveryData deliveryData) {
+        this.deliveryData = deliveryData;
         orders = new ArrayList<>();
     }
 
-    public Customer(String firstName, String lastName, String address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        orders = new ArrayList<>();
-    }
 
     public CustomerDto mapToDto() {
         return CustomerDto.builder()
                 .id(id)
-                .firstName(firstName)
-                .lastName(lastName)
-                .address(address)
+                .deliveryData(deliveryData == null ? DeliveryDataDto.builder().build() : deliveryData.mapToDto())
                 .basket(basket.mapToDto())
                 .orders(orders.stream()
                         .map(Order::mapToDto)
@@ -55,36 +45,9 @@ public class Customer {
                 .build();
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public long getId() {
         return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public Basket getBasket() {
@@ -103,7 +66,15 @@ public class Customer {
         this.orders = orders;
     }
 
-    public void addOrderToList(Order order){
+    public DeliveryData getDeliveryData() {
+        return deliveryData;
+    }
+
+    public void setDeliveryData(DeliveryData deliveryData) {
+        this.deliveryData = deliveryData;
+    }
+
+    public void addOrderToList(Order order) {
         orders.add(order);
     }
 
@@ -124,11 +95,9 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", address='" + address + '\'' +
-                ", basket=" + basket.getId() +
-                ", orders" + orders +
+                ", deliveryData=" + deliveryData +
+                ", basket=" + basket +
+                ", orders=" + orders +
                 '}';
     }
 }

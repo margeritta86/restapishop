@@ -11,9 +11,7 @@ import java.util.List;
 public class CustomerDto {
 
     private long id;
-    private String firstName;
-    private String lastName;
-    private String address;
+    private DeliveryDataDto deliveryData;
     private BasketDto basket;
     private List<OrderDto> orders;
 

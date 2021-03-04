@@ -1,9 +1,10 @@
 package com.orka.restapishop.model;
 
 import com.orka.restapishop.dto.BasketDto;
+import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.excepiton.ProductNotFoundException;
-
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,19 +16,20 @@ public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne(mappedBy = "basket")
-    private Customer customer;
     @ElementCollection
     private Map<Product, Integer> products;
     private String discountCode;
+    private BigDecimal totalPrice;
+    @OneToOne
+    private DeliveryData deliveryData;
 
 
     public Basket() {
         products = new HashMap<>();
     }
 
-    public Basket(Customer customer) {
-        this.customer = customer;
+    public Basket(DeliveryData deliveryData) {
+        this.deliveryData = deliveryData;
         products = new HashMap<>();
     }
 
@@ -35,31 +37,16 @@ public class Basket {
 
         return BasketDto.builder()
                 .id(id)
-                .customerId(customer.getId())//todo przy pobieraniu danych o koszyku, który nie ma przypisanego customera wywala nullpointera
+                .deliveryData(deliveryData == null ? DeliveryDataDto.builder().build() : deliveryData.mapToDto())
                 .products(products.entrySet().stream()
                         .collect(Collectors.toMap(e -> e.getKey().getId(), Map.Entry::getValue)))
                 .discountCode(discountCode)
+                .totalPrice(totalPrice)
                 .build();
     }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    /*public Optional<Customer> getCustomer() {
-        return Optional.ofNullable(customer);
-    }*/
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public Map<Product, Integer> getProducts() {
@@ -78,6 +65,14 @@ public class Basket {
         this.discountCode = discountCode;
     }
 
+    public DeliveryData getDeliveryData() {
+        return deliveryData;
+    }
+
+    public void setDeliveryData(DeliveryData deliveryData) {
+        this.deliveryData = deliveryData;
+    }
+
     public void addProduct(Product product, Integer amount) {
         if (products.containsKey(product)) {
 
@@ -94,12 +89,28 @@ public class Basket {
         products.put(product, amount);
     }
 
-    public void deleteProduct(Product product){
+    public void deleteProduct(Product product) {
         if (!products.containsKey(product)) {
             throw new ProductNotFoundException(product.getId());
         }
         products.remove(product);
 
+    }
+
+    public BigDecimal getTotalPrice() {
+
+        for (Map.Entry<Product, Integer> productIntegerEntry : products.entrySet()) {
+                BigDecimal price = productIntegerEntry.getKey().getPrice();
+                BigDecimal amountOfProduct = new BigDecimal(productIntegerEntry.getValue());
+                BigDecimal totalPriceOfProduct =  price.multiply(amountOfProduct);
+                totalPrice.add(totalPriceOfProduct);
+        }
+
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     @Override
@@ -115,13 +126,15 @@ public class Basket {
         return Objects.hash(id);
     }
 
+
     @Override
     public String toString() {
         return "Basket{" +
                 "id=" + id +
-                ", customer=" + customer.getId() +
                 ", products=" + products +
-                ", discount=" + discountCode +
+                ", discountCode='" + discountCode + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", deliveryData=" + deliveryData +
                 '}';
     }
 }
