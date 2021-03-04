@@ -3,13 +3,13 @@
 
 ### BASIC PART
 
-- zwraca listę produktów (nazwa, cena, obrazek) 
-- zwraca szczegóły produktu (szczegóły, lista kilku atrybutów, ocena produktu) 
+- zwraca listę produktów ( nazwa, cena, obrazek ) 
+- zwraca szczegóły produktu ( szczegóły, lista kilku atrybutów, ocena produktu ) 
 - dodaje produkt do koszyka 
 - zwraca dane o koszyku 
-- pozwala na operacje na koszyku (zwiększania ilości, usuwania produktów, ustawiania kodu rabatowego) 
-- ustawia w koszyku podstawowe dane użytkownika (imię, nazwisko, adres dostawy) 
-- pozwala złożyć zamówienie na koszyk (zakładamy płatność przy odbiorze) 
+- pozwala na operacje na koszyku ( zwiększania ilości, usuwania produktów, ustawiania kodu rabatowego ) 
+- ustawia w koszyku podstawowe dane użytkownika ( imię, nazwisko, adres dostawy ) 
+- pozwala złożyć zamówienie na koszyk ( zakładamy płatność przy odbiorze ) 
 
 
 ### ADDITIONAL PART
@@ -33,6 +33,8 @@
 * `POST http://localhost:8080/api/baskets/{id}/users` - set basic customer's data in the basket (identyfied by basket's id)
 * `POST http://localhost:8080/api/baskets/{id}/orders` - place order for the basket (identyfied by basket's id)
 * `GET http://localhost:8080/api/users/{id}` - get list of all customer's orders (identyfied by customer's id)
+* `GET http://localhost:8080/api/products/byPrice?price={price}&minOrMax={min or max}` - get list of products by minimal or maximum price
+* `GET http://localhost:8080/api/products/byKeyword?keyword=ham` - get list of products by keyword
 
 
 
