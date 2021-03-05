@@ -6,6 +6,8 @@ import com.orka.restapishop.dto.ProductDto;
 import com.orka.restapishop.service.ProductService;
 import com.orka.restapishop.view.View;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
 import java.util.List;
 
 
@@ -33,13 +35,13 @@ public class ProductController {
 
     @JsonView({View.MinimalDetails.class})
     @GetMapping("/products/byPrice")
-    public List<ProductDto> getProductsByMinPrice(@RequestParam Long price, @RequestParam String minOrMax){//todo nie jest precyzyjne jeśli chodzi o zakres ceny
+    public Collection<ProductDto> getProductsByMinPrice(Double price, String minOrMax){
        return productService.getProductsByMinPrice(price,minOrMax);
     }
 
     @JsonView({View.MinimalDetails.class})
     @GetMapping("/products/byKeyword")
-    public List<ProductDto> getProductsByKeyword(@RequestParam String keyword){
+    public List<ProductDto> getProductsByKeyword( String keyword){//zrobić na repozytorium metodę ??
         return productService.getProductsByKeyword(keyword);
     }
 

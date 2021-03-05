@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +34,9 @@ public class ProductService {
         if (productRepository.count() > 0) {
             return;
         }
-        Product prod1 = new Product("Ham", new BigDecimal("5.07"), "imgUrl1");
-        Product prod2 = new Product("Mushrooms", new BigDecimal("8.08"), "imgUrl2");
-        Product prod3 = new Product("Pineapple", new BigDecimal("4.05"), "imgUrl3");
+        Product prod1 = new Product("Ham", new BigDecimal("5.07"), "imgUrl1", 10);
+        Product prod2 = new Product("Mushrooms", new BigDecimal("8.08"), "imgUrl2", 10);
+        Product prod3 = new Product("Pineapple", new BigDecimal("4.05"), "imgUrl3", 10);
 
         productRepository.save(prod1);
         productRepository.save(prod2);
@@ -64,18 +65,21 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> getProductsByMinPrice(Long price, String minOrmax) {
+    public Collection<ProductDto> getProductsByMinPrice(Double price, String minOrmax) {
+        Collection<Product> products;
         if (minOrmax.equals("min")) {
-            return getAllProducts().stream()
-                    .filter(productDto -> productDto.getPrice().longValue() >= price)
-                    .collect(Collectors.toList());
-        } else if (minOrmax.equals("max")) {
-            return getAllProducts().stream()
-                    .filter(productDto -> productDto.getPrice().longValue() <= price)
-                    .collect(Collectors.toList());
-        }
-        throw new RequestedValueException(minOrmax);
+            products = productRepository.findProductsByMinPrice(price);
 
+        } else if (minOrmax.equals("max")) {
+            products = productRepository.findProductsByMaxPrice(price);
+
+        } else {
+            throw new RequestedValueException(minOrmax);
+        }
+
+        return products.stream()
+                .map(Product::mapToDto)
+                .collect(Collectors.toList());
 
     }
 

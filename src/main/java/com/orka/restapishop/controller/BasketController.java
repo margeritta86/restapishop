@@ -3,6 +3,7 @@ package com.orka.restapishop.controller;
 
 import com.orka.restapishop.dto.BasketDto;
 import com.orka.restapishop.dto.DeliveryDataDto;
+import com.orka.restapishop.excepiton.BasketConflictException;
 import com.orka.restapishop.service.BasketService;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,27 +30,39 @@ public class BasketController {
 
     }
 
-    @PatchMapping()
-    public void updateBasket(@RequestBody BasketDto basket) {//todo
-        basketService.updateBasket(basket);
+    @PatchMapping("/{basketId}/products")
+    public void updateBasketProducts(@RequestBody BasketDto basket, @PathVariable Long basketId) {
+
+        if (basket.getId() != basketId && basket.getId() != 0) {
+            throw new BasketConflictException(basketId, basket.getId());
+        }
+        basketService.updateBasketProducts(basket, basketId);
+    }
+
+    @PatchMapping("/{basketId}/discount")
+    public void updateBasketDiscountCode(@RequestBody BasketDto basket, @PathVariable Long basketId) {
+
+        if (basket.getId() != basketId && basket.getId() != 0) {
+            throw new BasketConflictException(basketId, basket.getId());
+        }
+        basketService.updateBasketDiscountCode(basket, basketId);
     }
 
 
     @DeleteMapping("{basketId}/products/{productId}")
-    public void deleteProductFromBasket(@PathVariable Long basketId, @PathVariable Long productId){
-        basketService.deleteProductFromBasket(basketId,productId);
+    public void deleteProductFromBasket(@PathVariable Long basketId, @PathVariable Long productId) {
+        basketService.deleteProductFromBasket(basketId, productId);
 
     }
+
     @PostMapping("{basketId}/customers/")
-    public void setDeliveryData(@PathVariable Long basketId, @RequestBody DeliveryDataDto deliveryData){
-        basketService.setDeliveryData(basketId,deliveryData);
+    public void setDeliveryData(@PathVariable Long basketId, @RequestBody DeliveryDataDto deliveryData) {
+        basketService.setDeliveryData(basketId, deliveryData);
     }
 
-   /* @GetMapping("/{basketId}")
-    public BasketDto recalculateBasketTotalPRice(@PathVariable Long basketId){
-        basketService.recalculateBasketTotalPRice(basketId);
-    }*/
-
-
+    @GetMapping("/{basketId}/calculate")
+    public BasketDto recalculateBasketTotalPrice(@PathVariable Long basketId){
+       return basketService.recalculateBasketTotalPRice(basketId);
+    }
 
 }

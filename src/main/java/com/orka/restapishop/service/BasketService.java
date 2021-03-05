@@ -3,12 +3,10 @@ package com.orka.restapishop.service;
 
 import com.orka.restapishop.dto.BasketDto;
 import com.orka.restapishop.dto.DeliveryDataDto;
+import com.orka.restapishop.dto.DiscountCodeDto;
 import com.orka.restapishop.excepiton.*;
 import com.orka.restapishop.model.*;
-import com.orka.restapishop.repository.BasketRepository;
-import com.orka.restapishop.repository.CustomerRepository;
-import com.orka.restapishop.repository.OrderRepository;
-import com.orka.restapishop.repository.ProductRepository;
+import com.orka.restapishop.repository.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -22,14 +20,16 @@ public class BasketService {
     private CustomerRepository customerRepository;
     private ProductRepository productRepository;
     private OrderRepository orderRepository;
+    private DiscountCodeRepository discountCodeRepository;
     private DeliveryDataService deliveryDataService;
 
 
-    public BasketService(BasketRepository basketRepository, CustomerRepository customerRepository, ProductRepository productRepository, OrderRepository orderRepository, DeliveryDataService deliveryDataService) {
+    public BasketService(BasketRepository basketRepository, CustomerRepository customerRepository, ProductRepository productRepository, OrderRepository orderRepository, DiscountCodeRepository discountCodeRepository, DeliveryDataService deliveryDataService) {
         this.basketRepository = basketRepository;
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
+        this.discountCodeRepository = discountCodeRepository;
         this.deliveryDataService = deliveryDataService;
     }
 
@@ -112,51 +112,49 @@ public class BasketService {
     }
 
 
-    public void updateBasket(BasketDto basketDto) {
-        long id = basketDto.getId();
-        Basket basket = basketRepository.findById(id).orElseThrow(() -> new BasketNotFoundException(id));
-        boolean codeUpdated = updateDiscountCode(basketDto, basket);
-        if (!codeUpdated) {
-            updateProductAmount(basketDto, basket);
-        }
+    public void updateBasketProducts(BasketDto basketDto, Long basketId) {
+
+        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
+        updateProductAmount(basketDto, basket);
         basketRepository.save(basket);
     }
 
-    private boolean updateDiscountCode(BasketDto basketDto, Basket basket) {
-        String discountCode = basketDto.getDiscountCode();
-        if (discountCode == null || discountCode.isBlank() || discountCode.equals(basket.getDiscountCode())) {
-            return false;
-        }
-        basket.setDiscountCode(discountCode);
-        return true;
-    }
-
     private void updateProductAmount(BasketDto basketDto, Basket basket) {
+
+        if (basketDto.getProducts() == null) {
+            return;
+        }
         basketDto.getProducts().entrySet().stream().forEach(entry -> {
             Long productId = entry.getKey();
             int requestedAmount = entry.getValue();
             Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
-            if (requestedAmount > product.getAmount() || requestedAmount <= 0) {
-                throw new RequestedAmountException(createAmountMessageException(productId, requestedAmount));
-            }
             basket.updateProduct(product, requestedAmount);
         });
     }
 
+    public void updateBasketDiscountCode(BasketDto basketDto, Long basketId) {
 
-    private String createAmountMessageException(long idProduct, int amount) {
-        String message = "";
-
-        if (amount <= 0) {
-            message = "Requested amount: " + amount + "is too low.";
-        } else {
-            message = "inventory value: " + amount + " exceeded ";
-        }
-
-        message += " for product id" + idProduct;
-
-        return message;
+        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
+        updateDiscountCode(basketDto, basket);
+        basketRepository.save(basket);
     }
+
+    private void updateDiscountCode(BasketDto basketDto, Basket basket) {
+        String discountCode = basketDto.getDiscountCode();
+
+        if (discountCode == null) {
+            return;
+        } else if (basket.getDiscountCode() != null && discountCode.equals(basket.getDiscountCode().getName())){
+            return;
+        }
+            applyDiscount(basketDto, basket);
+    }
+
+    private void applyDiscount(BasketDto basketDto, Basket basket) {
+        DiscountCode discount = discountCodeRepository.findByName(basketDto.getDiscountCode().toLowerCase()).orElseThrow(); //todo zrobić exception i advice
+        basket.setDiscountCode(discount);
+    }
+
 
     public void deleteProductFromBasket(Long basketId, Long productId) {
         Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
@@ -165,7 +163,7 @@ public class BasketService {
     }
 
     public void setDeliveryData(Long basketId, DeliveryDataDto deliveryDataDto) {
-        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
+        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));//wyekstraktować do metod
         DeliveryData deliveryData = deliveryDataService.createAndSaveDeliveryData(deliveryDataDto);
         basket.setDeliveryData(deliveryData);
         basketRepository.save(basket);
@@ -185,13 +183,13 @@ public class BasketService {
             customer.addOrderToList(order);
             customerRepository.save(customer);
         });
-
         orderRepository.save(order);
-
     }
 
-    public void recalculateBasketTotalPRice(Long basketId) {
-
-
+    public BasketDto recalculateBasketTotalPRice(Long basketId) {
+        Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));
+        basket.calculateTotalPrice();
+        basketRepository.save(basket);
+        return basket.mapToDto();
     }
 }

@@ -30,10 +30,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, BigDecimal price, String imageUrl) {
+    public Product(String name, BigDecimal price, String imageUrl,long amount) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.amount = amount;
     }
 
     public ProductDto mapToDto() {

@@ -14,7 +14,7 @@ public class BasketDto {
 
     private long id;
     private DeliveryDataDto deliveryData;
-    private Map <Long,Integer> products;//todo może wyświetlać nazwy produktów, a nie id?
+    private Map <Long,Integer> products;
     private String discountCode;
     private BigDecimal totalPrice;
 
