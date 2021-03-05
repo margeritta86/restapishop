@@ -1,10 +1,10 @@
 package com.orka.restapishop.controller;
 
-
 import com.orka.restapishop.dto.BasketDto;
 import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.excepiton.BasketConflictException;
 import com.orka.restapishop.service.BasketService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -56,8 +56,10 @@ public class BasketController {
     }
 
     @PostMapping("{basketId}/customers/")
-    public void setDeliveryData(@PathVariable Long basketId, @RequestBody DeliveryDataDto deliveryData) {
-        basketService.setDeliveryData(basketId, deliveryData);
+    public DeliveryDataDto setDeliveryData(@PathVariable Long basketId, @Valid @RequestBody DeliveryDataDto deliveryData) {
+
+
+        return basketService.setDeliveryData(basketId, deliveryData);
     }
 
     @GetMapping("/{basketId}/calculate")

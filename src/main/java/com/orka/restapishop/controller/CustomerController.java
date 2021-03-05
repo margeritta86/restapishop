@@ -19,7 +19,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/orders")
     public List<OrderDto> getListOfOrders(@PathVariable Long id) {
         return customerService.getListOfOrders(id);
     }

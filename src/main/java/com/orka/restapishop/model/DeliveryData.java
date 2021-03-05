@@ -1,10 +1,6 @@
 package com.orka.restapishop.model;
 
 import com.orka.restapishop.dto.DeliveryDataDto;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -20,13 +16,8 @@ public class DeliveryData {
     private long id;
     @OneToOne
     private Address address;
-    @Size(min = 3, message = "Invalid first name - It has to be at least 3 characters !")
-    @Pattern(regexp = "^[A-Za-z]+$")
     private String firstName;
-    @Size(min = 3, message = "Invalid last name - It has to be at least 3 characters !")
-    @Pattern(regexp = "^[A-Za-z]+$")
     private String lastName;
-    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Invalid mail format!")
     private String email;
 
     public DeliveryData() {

@@ -1,10 +1,6 @@
 package com.orka.restapishop.model;
 
 
-
-
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -15,20 +11,11 @@ public class Address {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
-    @Size(min = 3, message = "Invalid city - It has to be at least 3 characters !")
-    @Pattern(regexp = "^[A-Za-z]+$")
     private String city;
-    @Size(min = 3, message = "Invalid street - It has to be at least 3 characters !")
-    @Pattern(regexp = "^[A-Za-z]+$")
     private String street;
-    @Size(min = 1, message = "Invalid building number - It has to be at least 3 characters !")
-    @Pattern(regexp = "[1-9]+")
     private String buildingNumber;
     private String flatNumber;
-    @Size(min = 3, message = "Invalid city - It has to be at least 3 characters !")
     private String postCode;
-    @Size(min = 4, message = "Invalid country - It has to be at least 4 characters !")
-    @Pattern(regexp = "^[A-Za-z]+$")
     private String country;
 
     public Address() {

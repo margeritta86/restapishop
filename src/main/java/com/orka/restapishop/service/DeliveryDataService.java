@@ -6,6 +6,7 @@ import com.orka.restapishop.model.Address;
 import com.orka.restapishop.model.DeliveryData;
 import com.orka.restapishop.repository.AddressRepository;
 import com.orka.restapishop.repository.DeliveryDataRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 

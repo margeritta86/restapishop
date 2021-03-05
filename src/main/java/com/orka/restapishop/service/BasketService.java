@@ -162,11 +162,12 @@ public class BasketService {
         basketRepository.save(basket);
     }
 
-    public void setDeliveryData(Long basketId, DeliveryDataDto deliveryDataDto) {
+    public DeliveryDataDto setDeliveryData(Long basketId, DeliveryDataDto deliveryDataDto) {
         Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new BasketNotFoundException(basketId));//wyekstraktować do metod
         DeliveryData deliveryData = deliveryDataService.createAndSaveDeliveryData(deliveryDataDto);
         basket.setDeliveryData(deliveryData);
         basketRepository.save(basket);
+        return deliveryData.mapToDto();
     }
 
     public void placeOrder(Long basketId, Optional<Long> customerId) {

@@ -6,7 +6,6 @@ import com.orka.restapishop.dto.ProductDto;
 import com.orka.restapishop.service.ProductService;
 import com.orka.restapishop.view.View;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class ProductController {
 
     @JsonView({View.MinimalDetails.class})
     @GetMapping("/products/byKeyword")
-    public List<ProductDto> getProductsByKeyword( String keyword){//zrobić na repozytorium metodę ??
+    public Collection<ProductDto> getProductsByKeyword( String keyword){
         return productService.getProductsByKeyword(keyword);
     }
 

@@ -76,18 +76,17 @@ public class ProductService {
         } else {
             throw new RequestedValueException(minOrmax);
         }
-
         return products.stream()
                 .map(Product::mapToDto)
                 .collect(Collectors.toList());
 
     }
 
-    public List<ProductDto> getProductsByKeyword(String keyword) {
+    public Collection<ProductDto> getProductsByKeyword(String keyword) {
         String keywordLower = keyword.toLowerCase();
-        return getAllProducts().stream()
-                .filter(productDto -> productDto.getName().toLowerCase().contains(keywordLower))
+        Collection<Product> products = productRepository.findProductsByKeyword(keywordLower);
+        return products.stream()
+                .map(Product::mapToDto)
                 .collect(Collectors.toList());
-
     }
 }

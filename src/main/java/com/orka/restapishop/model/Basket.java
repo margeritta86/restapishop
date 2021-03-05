@@ -5,7 +5,6 @@ import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.dto.DiscountCodeDto;
 import com.orka.restapishop.excepiton.ProductNotFoundException;
 import com.orka.restapishop.excepiton.RequestedAmountException;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
@@ -83,12 +82,12 @@ public class Basket {
         String message = "";
 
         if (amount <= 0) {
-            message = "Requested amount: " + amount + "is too low.";
+            message = "Requested amount: " + amount + " is too low ";
         } else {
-            message = "inventory value: " + amount + " exceeded ";
+            message = "Inventory value: " + amount + " exceeded ";
         }
 
-        message += " for product id" + idProduct;
+        message += "for product id: " + idProduct;
 
         return message;
     }
