@@ -47,8 +47,6 @@ public class BasketService {
             return;
         }
 
-        //todo przygotowac razem z deliverydataa
-
         Customer customer1 = new Customer();
         Customer customer2 = new Customer();
         Customer customer3 = new Customer();

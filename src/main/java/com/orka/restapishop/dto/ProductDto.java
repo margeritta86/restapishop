@@ -27,7 +27,7 @@ public class ProductDto {
     @JsonView({View.Details.class})
     private Rate rate;
     @JsonView({View.Details.class})
-    private List<AttributeDto> attributes;//todo Attribute Dto
+    private List<AttributeDto> attributes;
     @JsonView({View.Details.class})
     private long amount;
     @JsonView({View.Details.class})
