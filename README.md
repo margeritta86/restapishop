@@ -30,7 +30,7 @@
 * `PATCH /api/baskets/{id}/products/{id}` - update product amount ( identified basket's id and product's id )
 * `DELETE /api/baskets/{id}/products/{id}` - delete product from basket ( identified basket's id and product's id )
 * `PATCH /api/baskets/{id}/discount` - set a discount code to basket ( identyfied by basket's id )
-* `POST /api/baskets/{id}/customers/` - set basic customer's data in the basket ( identyfied by basket's id )
+* `POST /api/baskets/{id}/customers` - set basic customer's data in the basket ( identyfied by basket's id )
 * `POST /api/orders/baskets/{id}` - place order for the basket ( identyfied by basket's id )
 * `POST /api/orders/baskets/{basketId}/customers/{customerId}` - place order for the basket with the customer ( identyfied by basket's id and customer's id )
 * `GET /api/customers/{id}/orders` - get list of all customer's orders ( identyfied by customer's id )
