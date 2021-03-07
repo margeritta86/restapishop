@@ -1,6 +1,6 @@
 package com.orka.restapishop.dto;
 
-import lombok.AccessLevel;
+
 import lombok.Builder;
 import lombok.Data;
 

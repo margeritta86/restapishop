@@ -5,10 +5,8 @@ import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.dto.DiscountCodeDto;
 import com.orka.restapishop.excepiton.ProductNotFoundException;
 import com.orka.restapishop.excepiton.RequestedAmountException;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 

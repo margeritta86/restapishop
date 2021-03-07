@@ -1,6 +1,5 @@
 package com.orka.restapishop.model;
 
-
 import javax.persistence.*;
 import java.util.Objects;
 

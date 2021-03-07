@@ -1,8 +1,6 @@
 package com.orka.restapishop.model;
 
-
 import com.orka.restapishop.dto.DiscountCodeDto;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;

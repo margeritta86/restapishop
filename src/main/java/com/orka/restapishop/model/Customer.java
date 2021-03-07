@@ -2,7 +2,6 @@ package com.orka.restapishop.model;
 
 import com.orka.restapishop.dto.CustomerDto;
 import com.orka.restapishop.dto.DeliveryDataDto;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

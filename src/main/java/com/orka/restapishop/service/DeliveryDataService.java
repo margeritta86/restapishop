@@ -1,15 +1,12 @@
 package com.orka.restapishop.service;
 
-
 import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.model.Address;
 import com.orka.restapishop.model.DeliveryData;
 import com.orka.restapishop.repository.AddressRepository;
 import com.orka.restapishop.repository.DeliveryDataRepository;
-
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 
 
 @Service
@@ -22,7 +19,6 @@ public class DeliveryDataService {
         this.deliveryDataRepository = deliveryDataRepository;
         this.addressRepository = addressRepository;
     }
-
 
 
     public DeliveryData createAndSaveDeliveryData( DeliveryDataDto deliveryDataDto){

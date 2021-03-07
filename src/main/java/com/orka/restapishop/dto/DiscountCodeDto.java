@@ -1,9 +1,7 @@
 package com.orka.restapishop.dto;
 
-
 import lombok.Builder;
 import lombok.Data;
-
 import java.time.LocalDate;
 
 @Builder

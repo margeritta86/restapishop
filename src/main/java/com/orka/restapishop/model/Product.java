@@ -1,10 +1,7 @@
 package com.orka.restapishop.model;
 
-import com.orka.restapishop.dto.AttributeDto;
-import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.dto.ProductDto;
 import com.orka.restapishop.excepiton.RequestedAmountException;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;

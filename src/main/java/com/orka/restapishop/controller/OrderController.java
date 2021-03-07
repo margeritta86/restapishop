@@ -1,7 +1,7 @@
 package com.orka.restapishop.controller;
 
-
 import com.orka.restapishop.service.BasketService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +19,14 @@ public class OrderController {
     }
 
     @PostMapping("/baskets/{basketId}")
-    public void placeOrder(@PathVariable Long basketId ){
+    public ResponseEntity<String> placeOrder(@PathVariable Long basketId ){
         basketService.placeOrder(basketId, Optional.empty());
+        return ResponseEntity.ok("You added order succesfully!");
     }
 
     @PostMapping("/baskets/{basketId}/customers/{customerId}")
-    public void placeOrder(@PathVariable Long basketId,@PathVariable Long customerId ){
+    public ResponseEntity<String> placeOrder(@PathVariable Long basketId, @PathVariable Long customerId ){
         basketService.placeOrder(basketId, Optional.of(customerId));
+        return ResponseEntity.ok("You added order succesfully!");
     }
 }

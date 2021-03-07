@@ -1,8 +1,6 @@
 package com.orka.restapishop.model;
 
-
 import com.orka.restapishop.dto.AttributeDto;
-
 import javax.persistence.*;
 import java.util.Objects;
 

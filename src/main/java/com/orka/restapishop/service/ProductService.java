@@ -9,7 +9,6 @@ import com.orka.restapishop.model.Rate;
 import com.orka.restapishop.repository.AttributeRepository;
 import com.orka.restapishop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.Collection;
