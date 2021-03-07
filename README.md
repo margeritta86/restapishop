@@ -35,7 +35,7 @@
 * `POST /api/orders/baskets/{basketId}/customers/{customerId}` - place order for the basket with the customer ( identyfied by basket's id and customer's id )
 * `GET /api/customers/{id}/orders` - get list of all customer's orders ( identyfied by customer's id )
 * `GET /api/products/byPrice?price={price}&minOrMax={min or max}` - get list of products by minimal or maximum price
-* `GET /api/products/byKeyword?keyword=ham` - get list of products by keyword
+* `GET /api/products/byKeyword?keyword={keyword}` - get list of products by keyword
 
 
 
