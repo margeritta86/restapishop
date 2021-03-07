@@ -8,6 +8,7 @@ import com.orka.restapishop.excepiton.RequestedAmountException;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -131,6 +132,7 @@ public class Basket {
             BigDecimal totalPriceOfProduct = price.multiply(amountOfProduct);
             totalPrice = totalPrice.add(totalPriceOfProduct);
         }
+
         return applyDiscount(totalPrice);
     }
 
@@ -138,7 +140,7 @@ public class Basket {
         if (discountCode == null) {
             return withoutDiscount;
         }
-        return BigDecimal.valueOf(1 -discountCode.getValue()).multiply(withoutDiscount);
+        return BigDecimal.valueOf(1 -discountCode.getValue()).multiply(withoutDiscount).setScale(2);
     }
 
     public void setDiscountCode(DiscountCode discountCode) {

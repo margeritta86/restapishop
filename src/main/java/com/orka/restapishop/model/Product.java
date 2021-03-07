@@ -138,7 +138,7 @@ public class Product {
 
     public void decreaseAmount(int count){
         if (amount - count < 0) {
-            throw new RequestedAmountException("The amount of the product is big "+ id);//todo zmienić
+            throw new RequestedAmountException("The amount of the product"+id+" is too large");//todo zmienić
         }
         amount -= count;
     }
