@@ -3,7 +3,6 @@ package com.orka.restapishop.model;
 import com.orka.restapishop.dto.ProductDto;
 import com.orka.restapishop.excepiton.RequestedAmountException;
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,7 +18,7 @@ public class Product {
     private long amount;
     private String name;
     @Column(scale = 2)
-    private BigDecimal price;
+    private Double price;
     private String imageUrl;
     private String details;
     private Rate rate;
@@ -34,7 +33,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, BigDecimal price, String imageUrl, long amount) {
+    public Product(String name, Double price, String imageUrl, long amount) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -82,12 +81,12 @@ public class Product {
         this.name = name;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public Double getPrice() {
+        return price;
     }
 
     public String getImageUrl() {
@@ -135,7 +134,7 @@ public class Product {
 
     public void decreaseAmount(int count){
         if (amount - count < 0) {
-            throw new RequestedAmountException("The amount of the product"+id+" is too large");//todo zmienić
+            throw new RequestedAmountException("The amount of the product"+id+" is too large");
         }
         amount -= count;
     }

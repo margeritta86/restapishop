@@ -125,7 +125,7 @@ public class Basket {
     public BigDecimal calculateTotalPrice() {
         BigDecimal totalPrice = new BigDecimal("0");
         for (Map.Entry<Product, Integer> productIntegerEntry : products.entrySet()) {
-            BigDecimal price = productIntegerEntry.getKey().getPrice();
+            BigDecimal price = BigDecimal.valueOf(productIntegerEntry.getKey().getPrice());
             BigDecimal amountOfProduct = new BigDecimal(productIntegerEntry.getValue());
             BigDecimal totalPriceOfProduct = price.multiply(amountOfProduct);
             totalPrice = totalPrice.add(totalPriceOfProduct);

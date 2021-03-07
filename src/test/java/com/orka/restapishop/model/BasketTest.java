@@ -26,7 +26,7 @@ class BasketTest {
     void shouldAddProductToTheBasket() {
         //given
         Basket basket = new Basket();
-        Product product  = new Product("Ham", new BigDecimal("5.07"), "imgUrl1", 10);
+        Product product  = new Product("Ham", 5.07, "imgUrl1", 10);
         //when
         basket.addProduct(product,10);
         //then
@@ -38,7 +38,7 @@ class BasketTest {
     void shouldThrowRequestedAmountException() {
         //given
         Basket basket = new Basket();
-        Product product  = new Product("Ham", new BigDecimal("5.07"), "imgUrl1", 10);
+        Product product  = new Product("Ham", 5.07, "imgUrl1", 10);
         //when
 
         //then
@@ -49,7 +49,7 @@ class BasketTest {
     @Test
     void shouldUpdateAmountOfGivenProduct() {
         //given
-        Product product  = new Product("Ham", new BigDecimal("5.07"), "imgUrl1", 10);
+        Product product  = new Product("Ham", 5.07, "imgUrl1", 10);
         Basket basket = new Basket();
         Map<Product,Integer> products = new HashMap<>();
         products.put(product,3);
@@ -65,7 +65,7 @@ class BasketTest {
     @Test
     void basketShouldNotContainsDeletedProduct() {
         //given
-        Product product  = new Product("Ham", new BigDecimal("5.07"), "imgUrl1", 10);
+        Product product  = new Product("Ham", 5.07, "imgUrl1", 10);
         Basket basket = new Basket();
         Map<Product,Integer> products = new HashMap<>();
         products.put(product,3);
@@ -81,7 +81,7 @@ class BasketTest {
     void shouldThrowExceptionOfNotFoundProductToDelete(){
         //given
         Basket basket = new Basket();
-        Product product  = new Product("Ham", new BigDecimal("5.07"), "imgUrl1", 10);
+        Product product  = new Product("Ham", 5.07, "imgUrl1", 10);
         //when
         //then
        Assertions.assertThrows(ProductNotFoundException.class,()-> basket.deleteProduct(product));
@@ -90,7 +90,7 @@ class BasketTest {
 
     @Test
     void shouldCalculateTotalPriceWithDiscountCode() {
-        Product product  = new Product("Ham", new BigDecimal("10.00"), "imgUrl1", 10);
+        Product product  = new Product("Ham", 10.00, "imgUrl1", 10);
         Basket basket = new Basket();
         Map<Product,Integer> products = new HashMap<>();
         products.put(product,3);

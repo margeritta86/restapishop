@@ -10,7 +10,6 @@ import com.orka.restapishop.repository.AttributeRepository;
 import com.orka.restapishop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,9 +33,9 @@ public class ProductService {
         if (productRepository.count() > 0) {
             return;
         }
-        Product prod1 = new Product("TV", new BigDecimal("1200.00"), "imgUrl1", 10);
-        Product prod2 = new Product("Headphones", new BigDecimal("500.00"), "imgUrl2", 10);
-        Product prod3 = new Product("Computer", new BigDecimal("3299.00"), "imgUrl3", 10);
+        Product prod1 = new Product("TV", 1200.00, "imgUrl1", 10);
+        Product prod2 = new Product("Headphones", 500.00, "imgUrl2", 10);
+        Product prod3 = new Product("Computer", 3299.00, "imgUrl3", 10);
 
         prod1.setRate(Rate.NOT_BAD);
         prod2.setRate(Rate.GOOD);

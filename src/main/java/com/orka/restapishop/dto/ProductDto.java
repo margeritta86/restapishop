@@ -23,7 +23,7 @@ public class ProductDto {
     @JsonView({View.Details.class})
     private String details;
     @JsonView({View.MinimalDetails.class})
-    private BigDecimal price;
+    private Double price;
     @JsonView({View.Details.class})
     private Rate rate;
     @JsonView({View.Details.class})

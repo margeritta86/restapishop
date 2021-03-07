@@ -24,7 +24,7 @@ public class BasketController {
     public ResponseEntity<String> addProductToBasket(@PathVariable Long basketId, @PathVariable Long productId, Integer count) {
         int actualCount = count == null ? 1 : count;
         basketService.saveProductToBasket(basketId, productId, actualCount);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
 
     }
 

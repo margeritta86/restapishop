@@ -41,9 +41,9 @@ class BasketServiceTest {
     private BasketService basketService = new BasketService(basketRepository, customerRepository, productRepository, orderRepository, discountCodeRepository, deliveryDataService);
 
 
-    private Product prod1 = new Product("Ham", new BigDecimal("5.07"), "imgUrl1", 10);
-    private Product prod2 = new Product("Mushrooms", new BigDecimal("8.08"), "imgUrl2", 10);
-    private Product prod3 = new Product("Pineapple", new BigDecimal("4.05"), "imgUrl3", 10);
+    private Product prod1 = new Product("Ham", 5.07, "imgUrl1", 10);
+    private Product prod2 = new Product("Mushrooms", 8.08, "imgUrl2", 10);
+    private Product prod3 = new Product("Pineapple", 4.05, "imgUrl3", 10);
 
     private Basket basket1 = new Basket();
     private Basket basket2 = new Basket();

@@ -21,7 +21,7 @@ class ProductTest {
     @BeforeAll
     void setupProduct() {
         //given
-        product = new Product("Ham", new BigDecimal("10.00"), "imgUrl1", 10);
+        product = new Product("Ham",10.00, "imgUrl1", 10);
     }
 
     @Test
@@ -35,7 +35,7 @@ class ProductTest {
     @Test
     void shouldReturnFalseValueForTheGivenProduct() {
         //given
-        Product product = new Product("Ham", new BigDecimal("10.00"), "imgUrl1", 0);
+        Product product = new Product("Ham", 10.00, "imgUrl1", 0);
 
         //when
         //then
