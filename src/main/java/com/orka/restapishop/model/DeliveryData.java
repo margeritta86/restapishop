@@ -1,10 +1,8 @@
 package com.orka.restapishop.model;
 
 import com.orka.restapishop.dto.DeliveryDataDto;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 
@@ -13,6 +11,7 @@ import java.util.Objects;
 public class DeliveryData {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToOne
     private Address address;

@@ -4,8 +4,12 @@ import com.orka.restapishop.dto.BasketDto;
 import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.excepiton.BasketConflictException;
 import com.orka.restapishop.service.BasketService;
-import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/baskets")
@@ -18,9 +22,10 @@ public class BasketController {
     }
 
     @PostMapping("/{basketId}/products/{productId}")
-    public void addProductToBasket(@PathVariable Long basketId, @PathVariable Long productId, Integer count) {
+    public ResponseEntity<String> addProductToBasket(@PathVariable Long basketId, @PathVariable Long productId, Integer count) {
         int actualCount = count == null ? 1 : count;
         basketService.saveProductToBasket(basketId, productId, actualCount);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
 
@@ -41,7 +46,6 @@ public class BasketController {
 
     @PatchMapping("/{basketId}/discount")
     public void updateBasketDiscountCode(@RequestBody BasketDto basket, @PathVariable Long basketId) {
-
         if (basket.getId() != basketId && basket.getId() != 0) {
             throw new BasketConflictException(basketId, basket.getId());
         }
@@ -56,15 +60,14 @@ public class BasketController {
     }
 
     @PostMapping("{basketId}/customers/")
-    public DeliveryDataDto setDeliveryData(@PathVariable Long basketId, @Valid @RequestBody DeliveryDataDto deliveryData) {
-
-
-        return basketService.setDeliveryData(basketId, deliveryData);
+    public ResponseEntity<String> setDeliveryData(@PathVariable Long basketId, @Valid @RequestBody DeliveryDataDto deliveryData) {
+        basketService.setDeliveryData(basketId, deliveryData);
+        return ResponseEntity.ok("You added delivery data succesfully!");
     }
 
     @GetMapping("/{basketId}/calculate")
     public BasketDto recalculateBasketTotalPrice(@PathVariable Long basketId){
-       return basketService.recalculateBasketTotalPRice(basketId);
+       return basketService.recalculateBasketTotalPrice(basketId);
     }
 
 }

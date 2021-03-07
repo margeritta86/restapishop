@@ -1,6 +1,8 @@
 package com.orka.restapishop.model;
 
 
+import com.orka.restapishop.dto.AttributeDto;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -23,6 +25,13 @@ public class Attribute {
         this.name = name;
         this.value = value;
 
+    }
+
+    public AttributeDto mapToDto(){
+        return AttributeDto.builder()
+                .id(id)
+                .name(name)
+                .value(value).build();
     }
 
     public Long getId() {

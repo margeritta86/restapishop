@@ -5,6 +5,7 @@ import com.orka.restapishop.dto.DeliveryDataDto;
 import com.orka.restapishop.dto.DiscountCodeDto;
 import com.orka.restapishop.excepiton.ProductNotFoundException;
 import com.orka.restapishop.excepiton.RequestedAmountException;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
@@ -18,13 +19,12 @@ public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<Product, Integer> products;
     @ManyToOne
     private DiscountCode discountCode;
     @OneToOne
     private DeliveryData deliveryData;
-    private BigDecimal totalPrice;
 
     public Basket() {
         products = new HashMap<>();
@@ -43,12 +43,16 @@ public class Basket {
                 .products(products.entrySet().stream()
                         .collect(Collectors.toMap(e -> e.getKey().getId(), Map.Entry::getValue)))
                 .discountCode(discountCode == null ? DiscountCodeDto.builder().build().getName() : discountCode.mapToDto().getName())
-                .totalPrice(totalPrice)
+                .totalPrice(calculateTotalPrice())
                 .build();
     }
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Map<Product, Integer> getProducts() {
@@ -68,10 +72,18 @@ public class Basket {
     }
 
     public void addProduct(Product product, Integer amount) {
-        if (amount >= product.getAmount() || amount <= 0) {
+
+        int actualAmount;
+        if (products.get(product) == null) {
+            actualAmount = 0;
+        } else {
+            actualAmount = products.get(product);
+        }
+        if (actualAmount+amount > product.getAmount() || amount <= 0) {
             throw new RequestedAmountException(createAmountMessageException(product.getId(), amount));
         }
-        products.put(product, amount);
+        products.put(product, actualAmount + amount);
+        calculateTotalPrice();
     }
 
     public DiscountCode getDiscountCode() {
@@ -81,8 +93,10 @@ public class Basket {
     private String createAmountMessageException(long idProduct, int amount) {
         String message = "";
 
-        if (amount <= 0) {
-            message = "Requested amount: " + amount + " is too low ";
+        if (amount < 0) {
+            message = "Requested amount: " + amount + " cannot be a negative number";
+        } else if (amount == 0) {
+            message = "Requested amount: " + amount + " cannot be 0 value";
         } else {
             message = "Inventory value: " + amount + " exceeded ";
         }
@@ -98,6 +112,7 @@ public class Basket {
             throw new ProductNotFoundException(product.getId());
         }
         products.put(product, amount);
+        calculateTotalPrice();
     }
 
     public void deleteProduct(Product product) {
@@ -116,16 +131,14 @@ public class Basket {
             BigDecimal totalPriceOfProduct = price.multiply(amountOfProduct);
             totalPrice = totalPrice.add(totalPriceOfProduct);
         }
-        this.totalPrice = applyDiscount(totalPrice);
-
-        return this.totalPrice;
+        return applyDiscount(totalPrice);
     }
 
     private BigDecimal applyDiscount(BigDecimal withoutDiscount) {
         if (discountCode == null) {
-             return withoutDiscount;
+            return withoutDiscount;
         }
-        return BigDecimal.valueOf(discountCode.getValue() + 1).multiply(withoutDiscount);
+        return BigDecimal.valueOf(1 -discountCode.getValue()).multiply(withoutDiscount);
     }
 
     public void setDiscountCode(DiscountCode discountCode) {
@@ -144,6 +157,8 @@ public class Basket {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 
 
     @Override

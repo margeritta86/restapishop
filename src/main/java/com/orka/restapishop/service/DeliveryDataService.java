@@ -6,8 +6,10 @@ import com.orka.restapishop.model.Address;
 import com.orka.restapishop.model.DeliveryData;
 import com.orka.restapishop.repository.AddressRepository;
 import com.orka.restapishop.repository.DeliveryDataRepository;
-import jakarta.validation.Valid;
+
 import org.springframework.stereotype.Service;
+
+import javax.validation.Valid;
 
 
 @Service
@@ -23,10 +25,10 @@ public class DeliveryDataService {
 
 
 
-    public DeliveryData createAndSaveDeliveryData(DeliveryDataDto deliveryDataDto){
+    public DeliveryData createAndSaveDeliveryData( DeliveryDataDto deliveryDataDto){
         Address address = new Address(deliveryDataDto.getCity(), deliveryDataDto.getStreet(), deliveryDataDto.getBuildingNumber(),
                 deliveryDataDto.getFlatNumber(), deliveryDataDto.getPostCode(), deliveryDataDto.getCountry());
-        DeliveryData deliveryData = new DeliveryData(address, deliveryDataDto.getFirstName(), deliveryDataDto.getLastName(), deliveryDataDto.getEmail());//todo walidacja pól z deliverydata i address
+        DeliveryData deliveryData = new DeliveryData(address, deliveryDataDto.getFirstName(), deliveryDataDto.getLastName(), deliveryDataDto.getEmail());
         addressRepository.save(address);
         deliveryDataRepository.save(deliveryData);
         return deliveryData;

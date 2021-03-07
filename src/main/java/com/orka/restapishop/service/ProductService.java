@@ -5,6 +5,7 @@ import com.orka.restapishop.dto.ProductDto;
 import com.orka.restapishop.excepiton.ProductNotFoundException;
 import com.orka.restapishop.excepiton.RequestedValueException;
 import com.orka.restapishop.model.Product;
+import com.orka.restapishop.model.Rate;
 import com.orka.restapishop.repository.AttributeRepository;
 import com.orka.restapishop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -28,15 +29,19 @@ public class ProductService {
     }
 
 
-    @PostConstruct
+    @PostConstruct//wypełniam bazę danych testowymi danymi
     public void fillDatabase() {
 
         if (productRepository.count() > 0) {
             return;
         }
-        Product prod1 = new Product("Ham", new BigDecimal("5.07"), "imgUrl1", 10);
-        Product prod2 = new Product("Mushrooms", new BigDecimal("8.08"), "imgUrl2", 10);
-        Product prod3 = new Product("Pineapple", new BigDecimal("4.05"), "imgUrl3", 10);
+        Product prod1 = new Product("TV", new BigDecimal("1200.00"), "imgUrl1", 10);
+        Product prod2 = new Product("Headphones", new BigDecimal("500.00"), "imgUrl2", 10);
+        Product prod3 = new Product("Computer", new BigDecimal("3299.00"), "imgUrl3", 10);
+
+        prod1.setRate(Rate.NOT_BAD);
+        prod2.setRate(Rate.GOOD);
+        prod3.setRate(Rate.EXCELLENT);
 
         productRepository.save(prod1);
         productRepository.save(prod2);
@@ -65,16 +70,16 @@ public class ProductService {
     }
 
 
-    public Collection<ProductDto> getProductsByMinPrice(Double price, String minOrmax) {
+    public Collection<ProductDto> getProductsByMinPrice(Double price, String minOrMax) {
         Collection<Product> products;
-        if (minOrmax.equals("min")) {
+        if (minOrMax.equals("min")) {
             products = productRepository.findProductsByMinPrice(price);
 
-        } else if (minOrmax.equals("max")) {
+        } else if (minOrMax.equals("max")) {
             products = productRepository.findProductsByMaxPrice(price);
 
         } else {
-            throw new RequestedValueException(minOrmax);
+            throw new RequestedValueException(minOrMax);
         }
         return products.stream()
                 .map(Product::mapToDto)
