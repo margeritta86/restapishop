@@ -25,7 +25,7 @@
 
 * `GET /api/products` - get list of all products ( with name, price and imageUrl )
 * `GET /api/products/{id}` - get details, list of attributes, rate of the product by id
-* `POST /api/baskets//{basketId}/products/{id}`- add product to basket ( identified basket's id and product's id )
+* `POST /api/baskets/{basketId}/products/{id}`- add product to basket ( identified basket's id and product's id )
 * `GET /api/baskets/{id}` - get basket data ( identified by basket's id ) 
 * `PATCH /api/baskets/{id}/products/{id}` - update product amount ( identified basket's id and product's id )
 * `DELETE /api/baskets/{id}/products/{id}` - delete product from basket ( identified basket's id and product's id )
