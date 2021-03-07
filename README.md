@@ -36,7 +36,7 @@
 * `GET /api/customers/{id}/orders` - get list of all customer's orders ( identyfied by customer's id )
 * `GET /api/products/byPrice?price={price}&minOrMax={min or max}` - get list of products by minimal or maximum price
 * `GET /api/products/byKeyword?keyword=ham` - get list of products by keyword
-* `GET /api/baskets/{basketId}/calculate` - calculate the basket applying discount code ( identyfied by basket's id )
+
 
 
 
